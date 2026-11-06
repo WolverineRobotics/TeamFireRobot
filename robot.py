@@ -21,17 +21,15 @@ class MyRobot(wpilib.TimedRobot):
         left_stick_inputY = self.controller.getLeftY()
         right_stick_inputY = self.controller.getRightY()
 
-        if (left_stick_inputY != 0):
-            self.top_left_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, left_stick_inputY * 0.25)
-            self.top_right_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, left_stick_inputY * 0.25)
-            self.bottom_left_motor.set(phoenix5.VictorSPXControlMode.PercentOutput, left_stick_inputY * 0.25)
-            self.bottom_right_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, left_stick_inputY * 0.25)
+        left_velocity = (left_stick_inputY - right_stick_inputX) * 20.5
+        right_velocity = (left_stick_inputY + right_stick_inputX) * 20.5
 
-        if (right_stick_inputX != 0):
-            self.top_left_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, right_stick_inputX * 0.25)
-            self.top_right_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, right_stick_inputX * -0.25)
-            self.bottom_left_motor.set(phoenix5.VictorSPXControlMode.PercentOutput, right_stick_inputX * 0.25)
-            self.bottom_right_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, right_stick_inputX * -0.25)
+        self.top_left_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, left_velocity * 0.25)
+        self.top_right_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, right_velocity * 0.25)
+        self.bottom_left_motor.set(phoenix5.VictorSPXControlMode.PercentOutput, left_velocity * 0.25)
+        self.bottom_right_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, right_velocity * 0.25)
+
+
 
 
 
