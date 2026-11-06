@@ -1,4 +1,5 @@
 import wpilib
+from wpilib import SmartDashboard
 import phoenix5
 
 class MyRobot(wpilib.TimedRobot):
@@ -14,6 +15,8 @@ class MyRobot(wpilib.TimedRobot):
 
         self.controller = wpilib.XboxController(0)
 
+        self.kV = 446.338
+
 
     def teleopPeriodic(self):
         left_stick_inputX = self.controller.getLeftX()
@@ -21,13 +24,19 @@ class MyRobot(wpilib.TimedRobot):
         left_stick_inputY = self.controller.getLeftY()
         right_stick_inputY = self.controller.getRightY()
 
-        left_velocity = (left_stick_inputY - right_stick_inputX) * 20.5
-        right_velocity = (left_stick_inputY + right_stick_inputX) * 20.5
+        left_velocity = ((left_stick_inputY * 3.5) - (right_stick_inputX * 2.5)) * 0.52
+        right_velocity = ((left_stick_inputY * 3.5) + (right_stick_inputX * 2.5)) * 0.52
 
-        self.top_left_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, left_velocity * 0.25)
-        self.top_right_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, right_velocity * 0.25)
-        self.bottom_left_motor.set(phoenix5.VictorSPXControlMode.PercentOutput, left_velocity * 0.25)
-        self.bottom_right_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, right_velocity * 0.25)
+        left_input = left_velocity * (1 / self.kV) / 0.09
+        right_input = right_velocity * (1 / self.kV) / 0.09
+
+        SmartDashboard.putNumber("left_input", left_input)
+        SmartDashboard.putNumber("right_input", right_input)
+
+        self.top_left_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, left_input)
+        self.top_right_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, right_input)
+        self.bottom_left_motor.set(phoenix5.VictorSPXControlMode.PercentOutput, left_input)
+        self.bottom_right_motor.set(phoenix5.TalonSRXControlMode.PercentOutput, right_input)
 
 
 
